@@ -1,7 +1,11 @@
 import classes from "./Score.module.scss";
 import logo from "../assets/images/logo-bonus.svg";
 
-function Score() {
+interface IProps {
+    score: number;
+}
+
+function Score({score}: IProps) {
 
     return (
         <header className={classes.score__container}>
@@ -10,7 +14,7 @@ function Score() {
             </div>
             <div className={classes.score__container__counter}>
                 <p>score</p>
-                <span>12</span>
+                <span>{score}</span>
             </div>
         </header>
     )

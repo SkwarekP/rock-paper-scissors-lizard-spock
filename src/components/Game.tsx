@@ -5,14 +5,16 @@ import React, {useEffect, useState} from "react";
 
 interface Props {
     data: Array<Properties>;
+    updateScore: (v1: string, v2: string) => void;
 }
 
 
-function Game({data}: Props) {
+function Game({data, updateScore}: Props) {
 
     const [isUserSelected, setIsUserSelected] = useState(false);
     const [userChoice, setUserChoice] = useState({type: "", url: ""});
     const [computerChoice, setComputerChoice] = useState({type: "", url: ""});
+
 
     useEffect(() => {
 
@@ -21,18 +23,20 @@ function Game({data}: Props) {
                 const ai = Math.floor(Math.random() * 5 + 1);
                 const selectOne = data.find(item => item.id === ai)
                 setComputerChoice({type: selectOne!.type, url: selectOne!.url});
+                updateScore(userChoice.type, selectOne!.type)
             }
         }, 500)
+
 
         return () => {
             clearTimeout(timeout);
         }
 
-
+// eslint-disable-next-line
     }, [userChoice])
 
 
-    const handleEventClicked = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleEventClicked = (e: React.MouseEvent<HTMLButtonElement>): void => {
         const find = data.find(item => item.type === e.currentTarget.value)
         setUserChoice({type: find!.type, url: find!.url});
         setIsUserSelected(true);
@@ -41,7 +45,7 @@ function Game({data}: Props) {
     const playAgainHandler = (): void => {
         setIsUserSelected(false);
         setUserChoice({type: "", url: ""});
-        setComputerChoice({type :"", url: ""});
+        setComputerChoice({type: "", url: ""});
     }
 
     return (
@@ -51,36 +55,37 @@ function Game({data}: Props) {
                         if (item.type === userChoice.type) {
                             return (
                                 <div key={item.id}>
-                                <div className={classes.userChose__container}>
-                                    <div>
-                                        <button
-                                            className={`${classes.userChose} ${classes[item.type]}`}>
-                                            <img src={item.url} alt={item.type}/>
-                                        </button>
-                                        <p>you picked</p>
-                                    </div>
-                                    {computerChoice.type === "" ?
-                                        <div className={classes.computerChose}>
-
-                                        </div>
-                                        :
+                                    <div className={classes.userChose__container}>
                                         <div>
-                                            <button key={computerChoice.url}
-                                                    className={`${classes.userChose} ${classes[computerChoice.type]}`}>
-                                                <img src={computerChoice.url} alt={item.type}/>
+                                            <button
+                                                className={`${classes.userChose} ${classes[item.type]}`}>
+                                                <img src={item.url} alt={item.type}/>
                                             </button>
-                                            <p>The House Picked</p>
+                                            <p>you picked</p>
                                         </div>
-                                    }
+                                        {computerChoice.type === "" ?
+                                            <div className={classes.computerChose}>
 
-                                </div>
+                                            </div>
+                                            :
+                                            <div>
+                                                <button key={computerChoice.url}
+                                                        className={`${classes.userChose} ${classes[computerChoice.type]}`}>
+                                                    <img src={computerChoice.url} alt={item.type}/>
+                                                </button>
+                                                <p>The House Picked</p>
+                                            </div>
+                                        }
+
+                                    </div>
                                 </div>
                             )
                         }
-
+                        return null;
 
                     })
-                    : <div>
+                    :
+                    <div>
                         <img src={pentagon} alt="pentagon"/>
                         {data.map(item => (
                             <button key={item.id}
@@ -91,35 +96,35 @@ function Game({data}: Props) {
                             </button>
                         ))}
                     </div>}
-                    {isUserSelected && <div className={classes.information__panel}>
-                                    {userChoice.type === "paper" && computerChoice.type === "rock" && <p>You win</p>}
-                                    {userChoice.type === "paper" && computerChoice.type === "spock" && <p>You win</p>}
-                                    {userChoice.type === "scissors" && computerChoice.type === "paper" && <p>You win</p>}
-                                    {userChoice.type === "scissors" && computerChoice.type === "lizard" && <p>You win</p>}
-                                    {userChoice.type === "rock" && computerChoice.type === "scissors" && <p>You win</p>}
-                                    {userChoice.type === "rock" && computerChoice.type === "lizard" && <p>You win</p>}
-                                    {userChoice.type === "spock" && computerChoice.type === "scissors" && <p>You win</p>}
-                                    {userChoice.type === "spock" && computerChoice.type === "rock" && <p>You win</p>}
-                                    {userChoice.type === "lizard" && computerChoice.type === "spock" && <p>You win</p>}
-                                    {userChoice.type === "lizard" && computerChoice.type === "paper" && <p>You win</p>}
-                                    {userChoice.type === computerChoice.type && <p>draw!</p>}
-                                    {computerChoice.type === "paper" && userChoice.type === "rock" && <p>The house win</p>}
-                                    {computerChoice.type === "paper" && userChoice.type === "spock" && <p>The house win</p>}
-                                    {computerChoice.type === "scissors" && userChoice.type === "paper" && <p>The house win</p>}
-                                    {computerChoice.type === "scissors" && userChoice.type=== "lizard" && <p>The house win</p>}
-                                    {computerChoice.type === "rock" && userChoice.type === "scissors" && <p>The house win</p>}
-                                    {computerChoice.type === "rock" && userChoice.type === "lizard" && <p>The house win</p>}
-                                    {computerChoice.type === "spock" && userChoice.type === "scissors" && <p>The house win</p>}
-                                    {computerChoice.type === "spock" && userChoice.type === "rock" && <p>The house win</p>}
-                                    {computerChoice.type === "lizard" && userChoice.type === "spock" && <p>The house win</p>}
-                                    {computerChoice.type === "lizard" && userChoice.type === "paper" && <p>The house win</p>}
-                               
-                                    <button className={classes.information__panel__btn} onClick={playAgainHandler}>
-                                        play again
-                                    </button>
-                                </div>}
+                {isUserSelected && <div className={classes.information__panel}>
+                    {userChoice.type === "paper" && computerChoice.type === "rock" && <p>You win</p>}
+                    {userChoice.type === "paper" && computerChoice.type === "spock" && <p>You win</p>}
+                    {userChoice.type === "scissors" && computerChoice.type === "paper" && <p>You win</p>}
+                    {userChoice.type === "scissors" && computerChoice.type === "lizard" && <p>You win</p>}
+                    {userChoice.type === "rock" && computerChoice.type === "scissors" && <p>You win</p>}
+                    {userChoice.type === "rock" && computerChoice.type === "lizard" && <p>You win</p>}
+                    {userChoice.type === "spock" && computerChoice.type === "scissors" && <p>You win</p>}
+                    {userChoice.type === "spock" && computerChoice.type === "rock" && <p>You win</p>}
+                    {userChoice.type === "lizard" && computerChoice.type === "spock" && <p>You win</p>}
+                    {userChoice.type === "lizard" && computerChoice.type === "paper" && <p>You win</p>}
+                    {userChoice.type === computerChoice.type && <p>draw!</p>}
+                    {computerChoice.type === "paper" && userChoice.type === "rock" && <p>The house win</p>}
+                    {computerChoice.type === "paper" && userChoice.type === "spock" && <p>The house win</p>}
+                    {computerChoice.type === "scissors" && userChoice.type === "paper" && <p>The house win</p>}
+                    {computerChoice.type === "scissors" && userChoice.type === "lizard" && <p>The house win</p>}
+                    {computerChoice.type === "rock" && userChoice.type === "scissors" && <p>The house win</p>}
+                    {computerChoice.type === "rock" && userChoice.type === "lizard" && <p>The house win</p>}
+                    {computerChoice.type === "spock" && userChoice.type === "scissors" && <p>The house win</p>}
+                    {computerChoice.type === "spock" && userChoice.type === "rock" && <p>The house win</p>}
+                    {computerChoice.type === "lizard" && userChoice.type === "spock" && <p>The house win</p>}
+                    {computerChoice.type === "lizard" && userChoice.type === "paper" && <p>The house win</p>}
+
+                    <button className={classes.information__panel__btn} onClick={playAgainHandler}>
+                        play again
+                    </button>
+                </div>}
             </div>
-            
+
 
         </div>
     )

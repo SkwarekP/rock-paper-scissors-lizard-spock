@@ -1,4 +1,5 @@
 .game__container {
+  margin-top: -2rem;
   padding: 2rem;
   display: flex;
   justify-content: center;
@@ -31,7 +32,7 @@
     .userChose__container {
       display: flex;
       gap: 4rem;
-      margin-top:-4rem;
+      margin-top: -4rem;
 
       .userChose {
         width: 105px;
@@ -122,24 +123,25 @@
   }
 
   .information__panel {
-    text-align:center;
+    text-align: center;
 
     p {
-      text-transform:uppercase;
-      margin-top:2rem;
-      font-size:2rem;
-      margin-bottom:0;
+      text-transform: uppercase;
+      margin-top: 2rem;
+      font-size: 2rem;
+      margin-bottom: 0;
     }
+
     &__btn {
-      margin-top:1rem;
+      margin-top: 1rem;
       text-transform: uppercase;
       letter-spacing: 2px;
-      font-size:.9rem;
-      padding:.85rem 3rem;
+      font-size: .9rem;
+      padding: .85rem 3rem;
       background-color: white;
-      border:none;
-      border-radius:5px;
-      cursor:pointer;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   }
 }
@@ -176,12 +178,29 @@
           width: 135px;
           height: 135px;
 
+
         }
 
       }
 
     }
 
+  }
+}
+
+@media (min-width: 968px) {
+
+  .game__container {
+
+    &__icon__container {
+      width: 100px;
+      height: 100px;
+
+      img {
+        max-width: 100%;
+      }
+
+    }
   }
 }
 
